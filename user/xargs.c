@@ -7,6 +7,7 @@ const int MSGSIZE = 16;
 int
 main(int argc, char* argv[])
 {
+    sleep(10);
     // firstly, get the standard output of the fronter command
     // this is the standard input of this command
     char buf[MSGSIZE];
