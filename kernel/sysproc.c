@@ -95,3 +95,18 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// Add a sys_trace() function
+uint64
+sys_trace(void)
+{
+  // get mask from user mode
+  int mask;
+  if(argint(0, &mask) < 0)
+    return -1;
+
+  struct proc *p = myproc();
+  p->mask = mask;
+  
+  return 0;
+}
