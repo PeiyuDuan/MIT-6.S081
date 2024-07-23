@@ -257,7 +257,14 @@ int
 is_lazy_alloc_va(uint64 va)
 {
   struct proc* p = myproc();
-  return va < p->sz;
+
+  if (va >= p->sz)
+    return 0;
+
+  if (va < PGROUNDDOWN(p->trapframe->sp) && va >= PGROUNDDOWN(p->trapframe->sp) - PGSIZE)
+    return 0;
+
+  return 1;
 }
 
 int
