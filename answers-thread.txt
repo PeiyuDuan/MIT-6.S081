@@ -1,0 +1,4 @@
+1. thread_switch()一定由一个函数调用，因此在函数调用栈上会保存caller-saved registers,无需重复保存
+
+2. 当两个thread同时进入了一个bucket且进行的都是写操作，则可能发生覆盖现象，导致插入丢失。
+
