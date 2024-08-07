@@ -1,0 +1,5 @@
+222 this line is to init test UTF-8
+1. 在最开始的时候，根据GDB调试显示，有一个LOAD，根据exec中载入程序的逻辑，LOAD的内容应该占一页。因此，page0应该映射这个LOAD的内容。之后跳出循环，进入下面的逻辑，注释如下: Allocate two pages at the next page boundary.Use the second as the user stack.在代码中，可以看出，一个是进程的栈，一个是guard page,因此，page2应该是进程的栈，page1是guard page.因此，用户不能访问page1中的内容。
+
+2. 这个测试是防溢出的。只要srcva+len溢出uint64即可。
+
