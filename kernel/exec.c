@@ -51,7 +51,7 @@ exec(char *path, char **argv)
     uint64 sz1;
     if((sz1 = uvmalloc(pagetable, sz, ph.vaddr + ph.memsz)) == 0)
       goto bad;
-    if (sz1 >= PLIC) // ·ÀÖ¹³¬¹ıPLIC
+    if (sz1 >= PLIC) // avoid exceeding PLIC
       goto bad;
     sz = sz1;
     if(ph.vaddr % PGSIZE != 0)
@@ -110,8 +110,12 @@ exec(char *path, char **argv)
       last = s+1;
   safestrcpy(p->name, last, sizeof(p->name));
 
+
+  // clear the old map
   uvmunmap(p->kernelpgtbl, 0, PGROUNDUP(oldsz) / PGSIZE, 0);
+  // copy a right one
   kvmcopymappings(pagetable, p->kernelpgtbl, 0, sz);
+  
     
   // Commit to the user image.
   oldpagetable = p->pagetable;

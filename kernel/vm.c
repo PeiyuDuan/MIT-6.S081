@@ -445,13 +445,12 @@ kvm_free_kernelpgtbl(pagetable_t pagetable)
   for(int i = 0; i < 512; i++){
     pte_t pte = pagetable[i];
     uint64 child = PTE2PA(pte);
-    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){ // 如果该页表项指向更低一级的页表
-      // 递归释放低一级页表及其页表项
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){
       kvm_free_kernelpgtbl((pagetable_t)child);
       pagetable[i] = 0;
     }
   }
-  kfree((void*)pagetable); // 释放当前级别页表所占用空间
+  kfree((void*)pagetable);
 }
 
 int
@@ -461,15 +460,13 @@ kvmcopymappings(pagetable_t src, pagetable_t dst, uint64 start, uint64 sz)
   uint64 pa, i;
   uint flags;
 
-  // PGROUNDUP: 对齐页边界，防止 remap
   for(i = PGROUNDUP(start); i < start + sz; i += PGSIZE){
     if((pte = walk(src, i, 0)) == 0)
       panic("kvmcopymappings: pte should exist");
     if((*pte & PTE_V) == 0)
       panic("kvmcopymappings: page not present");
     pa = PTE2PA(*pte);
-    // `& ~PTE_U` 表示将该页的权限设置为非用户页
-    // 必须设置该权限，RISC-V 中内核是无法直接访问用户页的。
+    // `& ~PTE_U` to ensure the kernel cannot access the user page.
     flags = PTE_FLAGS(*pte) & ~PTE_U;
     if(mappages(dst, i, PGSIZE, pa, flags) != 0){
       goto err;

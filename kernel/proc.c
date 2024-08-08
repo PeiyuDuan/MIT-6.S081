@@ -116,11 +116,13 @@ found:
   p->kernelpgtbl = kvminit_newpgtbl();
   // printf("kernel_pagetable: %p\n", p->kernelpgtbl);
 
-  // 分配一个物理页，作为新进程的内核栈使用
+  // new kernel stack
   char *pa = kalloc();
   if(pa == 0)
     panic("kalloc");
-  uint64 va = KSTACK((int)0); // 将内核栈映射到固定的逻辑地址上
+
+  // we only need to init one kstack, so map it into a confirmed position
+  uint64 va = KSTACK((int)0);
   // printf("map krnlstack va: %p to pa: %p\n", va, pa);
   kvmmap(p->kernelpgtbl, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
   p->kstack = va;
@@ -153,7 +155,8 @@ freeproc(struct proc *p)
   p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
-
+  
+  // free kernel stack
   void* kstack_pa = (void*)kvmpa(p->kernelpgtbl, p->kstack);
   kfree(kstack_pa);
   p->kstack = 0;
@@ -232,6 +235,8 @@ userinit(void)
   // and data into it.
   uvminit(p->pagetable, initcode, sizeof(initcode));
   p->sz = PGSIZE;
+
+  // do the same changes in kernel page table
   kvmcopymappings(p->pagetable, p->kernelpgtbl, 0, p->sz);
 
   // prepare for the very first "return" from kernel to user.
@@ -260,7 +265,7 @@ growproc(int n)
     if((newsz = uvmalloc(p->pagetable, sz, sz + n)) == 0) {
       return -1;
     }
-    // 内核页表中的映射同步扩大
+    // do the same changes in kernel page table
     if(kvmcopymappings(p->pagetable, p->kernelpgtbl, sz, n) != 0) {
       uvmdealloc(p->pagetable, newsz, sz);
       return -1;
@@ -268,7 +273,7 @@ growproc(int n)
     sz = newsz;
   } else if(n < 0){
     uvmdealloc(p->pagetable, sz, sz + n);
-    // 内核页表中的映射同步缩小
+    // do the same changes in kernel page table
     sz = kvmdealloc(p->kernelpgtbl, sz, sz + n);
   }
   p->sz = sz;
@@ -295,6 +300,8 @@ fork(void)
     release(&np->lock);
     return -1;
   }
+
+  // copy it into kernel page table
   if (kvmcopymappings(np->pagetable, np->kernelpgtbl, 0, p->sz) < 0)
   {
     freeproc(np);
@@ -501,11 +508,15 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
-
+        
+        // switch to this process's page table
         w_satp(MAKE_SATP(p->kernelpgtbl));
         sfence_vma();
-        swtch(&c->context, &p->context);
 
+        // process exec
+        swtch(&c->context, &p->context);
+        
+        // switch to global kernel page table
         kvminithart();
 
         // Process is done running for now.
