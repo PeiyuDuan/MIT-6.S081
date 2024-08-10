@@ -83,7 +83,8 @@ usertrap(void)
     {
       if (p->tick_count == p->ticks)
       {
-        *(p->old_trapframe) = *(p->trapframe);
+        memmove(p->old_trapframe, p->trapframe, sizeof(struct trapframe));
+        // *(p->old_trapframe) = *(p->trapframe);
         p->trapframe->epc = p->handler;
       }
       p->tick_count++;

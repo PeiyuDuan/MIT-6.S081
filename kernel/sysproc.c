@@ -103,8 +103,15 @@ sys_sigalarm(void)
   int ticks;
   uint64 handler;
 
-  argint(0, &ticks);
-  argaddr(1, &handler);
+  if (argint(0, &ticks) < 0 || argaddr(1, &handler) < 0)
+  {
+    return -1;
+  }
+
+  if (ticks < 0)
+  {
+    return -1;
+  }
 
   struct proc* p = myproc();
   p->ticks = ticks;
@@ -118,7 +125,8 @@ uint64
 sys_sigreturn(void)
 {
   struct proc* p = myproc();
-  *(p->trapframe) = *(p->old_trapframe);
+  memmove(p->trapframe, p->old_trapframe, sizeof(struct trapframe));
+  // *(p->trapframe) = *(p->old_trapframe);
   p->tick_count = 0;
   return 0;
 }
