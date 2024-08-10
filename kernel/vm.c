@@ -109,9 +109,12 @@ walkaddr(pagetable_t pagetable, uint64 va)
       {
         return 0;
       }
-      return walkaddr(pagetable, va);
     }
-    return 0;
+    else
+    {
+      return 0;
+    }
+    pte = walk(pagetable, va, 0);
   }
   
   if ((*pte & PTE_U) == 0)
