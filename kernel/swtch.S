@@ -7,8 +7,8 @@
 
 .globl swtch
 swtch:
-        sd ra, 0(a0)
-        sd sp, 8(a0)
+        sd ra, 0(a0)    # return address
+        sd sp, 8(a0)    # stack pointer
         sd s0, 16(a0)
         sd s1, 24(a0)
         sd s2, 32(a0)
