@@ -117,5 +117,5 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 
-  struct vm_area vma[16];
+  struct vm_area vma[NVMA];
 };
