@@ -59,19 +59,11 @@ binit(void)
   {
     initlock(&bcache.locks[i], "bucket_lock");
   }
-  // Create linked list of buffers
-  // bcache.head.prev = &bcache.head;
-  // bcache.head.next = &bcache.head;
-  for(b = bcache.buf; b < bcache.buf+NBUF; b++){
-    // b->next = bcache.head.next;
-    // b->prev = &bcache.head;
+
+  for(b = bcache.buf; b < bcache.buf + NBUF; b++){
     initsleeplock(&b->lock, "buffer");
-    // bcache.head.next->prev = b;
-    // bcache.head.next = b;
   }
 }
-
-// bget part ref to https://blog.csdn.net/LostUnravel/article/details/121430900
 
 // Look through buffer cache for block on device dev.
 // If not found, allocate a buffer.
@@ -86,18 +78,18 @@ bget(uint dev, uint blockno)
   int i;
   
   // loop up the buf in the buckets[idx]
-  acquire(&bcache.locks[idx]);  // lab8-2
+  acquire(&bcache.locks[idx]);
   for(b = bcache.buckets[idx].next; b; b = b->next){
     if(b->dev == dev && b->blockno == blockno){
       b->refcnt++;
-      release(&bcache.locks[idx]);  // lab8-2
+      release(&bcache.locks[idx]);
       acquiresleep(&b->lock);
       return b;
     }
   }
 
   // Not cached.
-  // check if there is a buf not used -lab8-2
+  // check if there is a buf not used
   acquire(&bcache.lock);
   if(bcache.size < NBUF) {
     b = &bcache.buf[bcache.size++];
@@ -115,8 +107,7 @@ bget(uint dev, uint blockno)
   release(&bcache.lock);
   release(&bcache.locks[idx]);
 
-  // select the last-recently used block int the bucket
-  //based on the timestamp - lab8-2
+  // select the last-recently used block int the bucket based on the timestamp
   acquire(&bcache.hashlock);
   for(i = 0; i < MASK; ++i) {
       mintimestamp = -1;
@@ -161,18 +152,6 @@ bget(uint dev, uint blockno)
           idx = 0;
       }
   }
-//  // Recycle the least recently used (LRU) unused buffer.
-//  for(b = bcache.head.prev; b != &bcache.head; b = b->prev){
-//    if(b->refcnt == 0) {
-//      b->dev = dev;
-//      b->blockno = blockno;
-//      b->valid = 0;
-//      b->refcnt = 1;
-//      release(&bcache.lock);
-//      acquiresleep(&b->lock);
-//      return b;
-//    }
-//  }
   panic("bget: no buffers");
 }
 
@@ -214,13 +193,6 @@ brelse(struct buf *b)
   acquire(&bcache.locks[id]);
   b->refcnt--;
   if (b->refcnt == 0) {
-    // no one is waiting for it.
-    // b->next->prev = b->prev;
-    // b->prev->next = b->next;
-    // b->next = bcache.head.next;
-    // b->prev = &bcache.head;
-    // bcache.head.next->prev = b;
-    // bcache.head.next = b;
     b->timestamp = ticks;
   }
   
@@ -242,5 +214,3 @@ bunpin(struct buf *b) {
   b->refcnt--;
   release(&bcache.locks[id]);
 }
-
-
