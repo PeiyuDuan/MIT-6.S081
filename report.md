@@ -26,22 +26,22 @@
 2. write(fd, buf, n)
 ½«bufÖÐµÄn¸ö×Ö½ÚÐ´ÈëÎÄ¼þÃèÊö·û£¬²¢·µ»Ø¶ÁÈ¡µÄ×Ö½ÚÊý¡£Ö»ÓÐ·¢Éú´íÎóÊ±²Å»áÐ´ÈëÐ¡ÓÚn×Ö½Ú¡£
 3. close
-ÊÍ·ÅÎÄ¼þÃèÊö·û
+ÊÍ·ÅÎÄ¼þÃèÊö·û£¬¸¸½ø³ÌÓë×Ó½ø³Ì¹²Ïí»ù´¡ÎÄ¼þÆ«ÒÆÁ¿
 
-¸¸½ø³ÌÓë×Ó½ø³Ì¹²Ïí»ù´¡ÎÄ¼þÆ«ÒÆÁ¿
+    ```c
+    if (fork() == 0) {
+      write(1, "hello ", 6);
+      exit(0);
+    } else {
+      wait(0);
+      write(1, "world\n", 6);
+    }
+    ```
 
-```c
-if (fork() == 0) {
-    write(1, "hello ", 6);
-    exit(0);
-} else {
-    wait(0);
-    write(1, "world\n", 6);
-}
-```
-```text
-hello world
-```
+    ```text
+    hello world
+    ```
+
 4. dup
 ¸´ÖÆÒ»¸öÏÖÓÐµÄÎÄ¼þÃèÊö·û£¬¹²ÏíÆ«ÒÆÁ¿(ÓëÉÏ·½forkÀàËÆ)
 
@@ -82,7 +82,7 @@ hello world
 
 Ö÷ÒªÊ¹ÓÃÁË°£ÊÏÉ¸µÄË¼Ïë¡£µÚÒ»¸ö´«ÈëµÄÊý×ÖÊÇ2£¬È»ºó°Ñ2µÄ±¶ÊýÈ«²¿É¸µô£¬Ö®ºó3ÊÇËØÊý£¬°Ñ3µÄ±¶ÊýÈ«²¿É¸µô¡­¡­µ½×îºó¿ÉÒÔ»ñÈ¡È«²¿µÄËØÊý¡£
 
-![](./Resource/Lab1/sieve.gif)
+![ÏÔÊ¾´íÎó](./Resource/Lab1/sieve.gif)
 
 ÔÚ´Ë´¦ÒªÇóÊ¹ÓÃ½ø³Ì¼äÍ¨ÐÅµÄ·½Ê½ÊµÏÖ£¬Î±´úÂëÈçÏÂ:
 
@@ -113,11 +113,14 @@ loop:
 
 - ÌâÄ¿½â¶Á
   - ÃüÁîÐÐ²ÎÊý
+  
     ```text
     mkdir a b c
     a b c ¼´Îª²ÎÊý
     ```
+
   - ±ê×¼»¯Êä³ö
+
     ```text
     grap a
 
@@ -129,7 +132,9 @@ loop:
     abc
     Ôò±ê×¼»¯Êä³öÎª abc
     ```
+
   - ¹ÜµÀ·û
+  
     ```text
     cmda | cmdb
     ½«cmdaÖÐµÄÊä³ö×÷ÎªcmdbµÄÊäÈë
@@ -137,7 +142,9 @@ loop:
     ÀýÈç find go | grep demo
     Ñ°ÕÒgoÎÄ¼þ¼ÐÖÐËùÓÐ°üº¬demoµÄÎÄ¼þ
     ```
+
   - xargs
+  
     ```text
     cmda | xargs cmdb
     cmdaµÄÊä³ö»á×÷ÎªcmdbµÄÃüÁîÐÐ²ÎÊý
@@ -145,6 +152,7 @@ loop:
     ÀýÈç echo hello | xargs echo hi
     Êä³öÎª hi hello
     ```
+
 - ´úÂëÊµÏÖÈý²½×ß
   - Ê×ÏÈ£¬»ñÈ¡Ç°Ò»¸öÃüÁîµÄ±ê×¼»¯Êä³ö
   - Ö®ºó£¬»ñÈ¡Õâ¸öÃüÁîµÄÃüÁîÐÐ²ÎÊý
@@ -161,7 +169,7 @@ loop:
 #### xv6½ø³Ì¸ÅÊö
 
 1. Ê¹ÓÃÒ³±í½«ÐéÄâµØÖ·Ó³ÉäÎªÎïÀíµØÖ·¡£Ã¿¸ö½ø³Ì¶¼ÓÐÒ»¸ö¶ÀÁ¢µÄÒ³±í£¬¶¨ÒåÁË¸Ã½ø³ÌµÄµØÖ·¿Õ¼ä¡£
-![](./Resource/Lab2/va.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab2/va.png)
 ÈçÍ¼ËùÊ¾£¬ÓÃ»§µØÖ·¿Õ¼ä´Ó0¿ªÊ¼£¬×î´óµØÖ·ÎªMAXVA£¬ÔÚµØÖ·¿Õ¼äµÄ¶¥²¿£¬ÓÐÒ»¸ötrampolineºÍtrapframe·Ö±ðÕ¼ÓÃÁËÒ»Ò³¡£
 2. Ã¿¸ö½ø³ÌÓÐÒ»¸öÓÃ»§Õ»ÇøºÍÒ»¸öÄÚºËÕ»Çø£¬µ±½ø³ÌÔÚÓÃ»§Ö¸ÁîÊ±£¬ÄÚºËÕ»Îª¿Õ£¬µ±Ö´ÐÐÄÚºËÖ¸ÁîÊ±£¬ÓÃ»§Õ»±£ÁôÊý¾Ý£¬µ«²»ÔÚ»îÔ¾×´Ì¬¡£
 3. Ê¹ÓÃargintµÈÄÚÈÝ´ÓÓÃ»§Ì¬»ñÈ¡¶ÔÓ¦µÄ²ÎÊý¡£
@@ -195,7 +203,7 @@ loop:
 
 Õâ¸öÊµÑé±È½ÏÀ§ÄÑ£¬Ä¿Ç°Ã»ÓÐÍêÃÀµØ×öÍê£¬ÒòÎªÎ´ÖªµÄÔ­Òò£¬ÓÐµÄÊ±ºò¿ÉÒÔ¹ý£¬ÓÐµÄÊ±ºò¹ý²»ÁË(ÔÚusertests´¦)¡£²¢ÇÒ£¬ÓÉÓÚÄÚºËµ÷ÊÔ±È½ÏÀ§ÄÑ£¬²Î¿¼ÁËÐí¶àÍøÉÏµÄ´úÂë£¬µ«ÊÇÎÊÌâ²¢Ã»ÓÐ½â¾ö¡£²¢ÇÒÒ»Ö±Ê¹ÓÃµÄprintµÄ·½Ê½ÓÉÓÚÒì²½¶øÐ§¹û²»ºÃ£¬¶ø±¾ÈËÓÖ¶Ôgdb²»ÊÇ·Ç³£ÊìÏ¤£¬Òò´ËÖ»ÄÜÔÝÊ±¸éÖÃ¡£ÏÂÃæ¸½ÉÏÒ»ÕÅÍ¨¹ýµÄÍ¼Æ¬¡£
 
-![](./Resource/Lab3/succeeded.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab3/succeeded.png)
 
 ### ÔÄ¶Á±Ê¼Ç
 
@@ -203,9 +211,9 @@ loop:
 
 1. Ò³±íÓ²¼þ½«ÐéÄâµØÖ·Ó³ÉäÎªÎïÀíµØÖ·¡£
 2. xv6Ö»Ê¹ÓÃ64Î»ÐéÄâµØÖ·µÄµÍ39Î»£¬Ò³±íÂß¼­ÉÏÓÐ2^27¸öÒ³±íÌõÄ¿(PTE)¡£Ã¿¸öPTE°üº¬Ò»¸ö44Î»µÄÎïÀíÒ³Âë(PPN)ºÍÒ»Ð©±êÖ¾¡£Ò³±íµÄÂß¼­Ê¾Í¼ÈçÏÂ¡£ÓÉÍ¼¿ÉÖª£¬Ò³Ãæ´óÐ¡Îª2^12×Ö½Ú£¬ÎïÀíµØÖ·ÓÐ56Î»¡£
-  ![](./Resource/Lab3/p1.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab3/p1.png)
 3. Ò³±íÊµ¼ÊµÄ×ª»»·ÖÈý¸ö²½Öè½øÐÐ¡£Ò³±íÊµ¼ÊµÄ½á¹¹ÊÇÒ»¸öÈý¼¶µÄÊ÷¡£Ê÷¸ùÊÇÒ»Ò³(4096byte)£¬ÆäÖÐ°üº¬512¸öPTE(8byte)¡£Ã¿¸öPTE°üº¬¸ÃÊ÷µÄÏÂÒ»¼¶Ò³±íÒ³µÄÎïÀíµØÖ·¡£Êµ¼ÊµÄ¹ý³ÌÈçÏÂÍ¼ËùÊ¾¡£
-  ![](./Resource/Lab3/p2.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab3/p2.png)
 4. ¸ùÒ³±íÒ³µÄÎïÀíµØÖ·ÔÚsatp¼Ä´æÆ÷ÖÐ¡£Ã¿¸öcpu¶¼ÓÐÒ»¸ösatp¡£
 
 #### 3.2 ÄÚºËµØÖ·¿Õ¼ä
@@ -263,7 +271,7 @@ vmprint_aux º¯ÊýÊ¹ÓÃÉîËÑµÄ·½Ê½´òÓ¡Õû¸öÒ³±í
     3. ÐÞ¸ÄkvmmapºÍkvmpaº¯Êý£¬Ìí¼ÓµÚÒ»¸ö²ÎÊýpagetable_t,±ãÓÚÖ®ºóµÄ²Ù×÷¡£(vm.c)
     4. ÔÚvirtio_disk_rwº¯ÊýÖÐ£¬µ÷ÓÃÁËkvmpaº¯Êý£¬ÇÒÓë±¾ÊµÑéÎÞ¹Ø£¬½øÐÐ´¦Àí¼´¿É¡£(virtio_disk.c)
 3. ¾­¹ýÒÔÉÏµÄ²Ù×÷£¬¿ÉÒÔ·ÖÅäÄÚºËÒ³±íÁË¡£µ«ÊÇ£¬ÔÚÍ¬Ò»Ê±¼äÄÚ£¬¿ÉÄÜÓÐ¶à¸ö½ø³ÌÍ¬Ê±´¦ÓÚÄÚºËÌ¬¡£ÔÚÔ­ÏÈµÄÉè¼ÆÖÐ£¬¹«ÓÃÒ»¸öÄÚºËÒ³±í£¬ÓÚÊÇÐèÒªÎª²»Í¬½ø³Ì´´½¨¶à¸öÄÚºËÕ»£¬È»ºómapµ½²»Í¬µÄµØ·½¡£(¼ûÏÂÍ¼Kstack0ºÍKstack1)
-  ![](./Resource/Lab3/p3.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab3/p3.png)
   ÔÚÐÞ¸ÄÖ®ºó£¬Ã¿¸ö½ø³Ì¶¼ÓÐ×Ô¼ºµÄÄÚºËÒ³±í£¬Òò´ËÖ»ÐèÒªmap³ö×Ô¼ºµÄÄÚºËÕ»¼´¿É¡£Òò´Ë½øÐÐÈçÏÂ²Ù×÷£º
       1. ÐÞ¸Äprocinitº¯Êý£¬É¾³ý´´½¨ÄÚºËÕ»µÄ´úÂë¡£(proc.c)
       2. ÔÚallocprocº¯ÊýµÄÊ±ºò£¬³ýÁË´´½¨kernelpgtblÖ®Íâ£¬°ÑÄÚºËÕ»Ó³Éäµ½Ò»¸öÈ·¶¨µÄÎ»ÖÃ¡£(proc.c)
@@ -319,7 +327,7 @@ vmprint_aux º¯ÊýÊ¹ÓÃÉîËÑµÄ·½Ê½´òÓ¡Õû¸öÒ³±í
 ÒÔÏµÍ³µ÷ÓÃÎªÀý£¬ÆäÓàÀàËÆ¡£
 
 1. ecallÖ¸Áî(»òÕßµ¼ÖÂÏÝÈëÏÝÚåµÄ²Ù×÷)
-    ![](./Resource/Lab4/trap-op.png)
+    ![ÏÔÊ¾´íÎó](./Resource/Lab4/trap-op.png)
 2. uservecº¯Êý(trampline.S)
     1. ±£´æÏÖ³¡
     2. ÇÐ»»Ò³±í¡¢kernel stack
@@ -340,7 +348,7 @@ vmprint_aux º¯ÊýÊ¹ÓÃÉîËÑµÄ·½Ê½´òÓ¡Õû¸öÒ³±í
     2. SEPCµÄ¼Ä´æÆ÷¿½±´µ½PC¼Ä´æÆ÷
     3. ´ò¿ªÖÐ¶Ï
 
-![](./Resource/Lab4/seq.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab4/seq.png)
 
 ### ÌâÄ¿
 
@@ -352,7 +360,7 @@ vmprint_aux º¯ÊýÊ¹ÓÃÉîËÑµÄ·½Ê½´òÓ¡Õû¸öÒ³±í
 
 1. °´ÕÕÌáÊ¾£¬ÔÚriscv.hÖÐÌí¼Ó¶ÁÈ¡s0¼Ä´æÆ÷µÄº¯Êý£¬ÔÚprintf.cÖÐÌí¼Óbacktrace()µÄº¯Êý£¬²¢ÔÚsys_sleepÖÐµ÷ÓÃ¡£Ö®ºó½â¶ÁbacktraceµÄÊµÏÖ¡£
 2. backtraceµÄÄ¿µÄÊÇ´òÓ¡º¯Êýµ÷ÓÃÕ»µÄµØÖ·¡£ÐèÒª²Î¿¼ÈçÏÂÕ»µÄ²¼¾Ö:
-  ![](./Resource/Lab4/p2.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab4/p2.png)
   ÓÉÍ¼¿ÉÖª£¬Õ»µÄ·µ»ØµØÖ·¼ÇÂ¼ÔÚ-8µ½0µÄÎ»ÖÃ(Ê×µØÖ·Îª-8)£¬ÀàËÆµÄ£¬Õ»ÀïÃæÓÐÒ»¸öÖ¸ÕëÖ¸ÏòÉÏÒ»¸öµ÷ÓÃÕ»£¬Ê×µØÖ·Îª-16¡£Òò´Ë£¬ÔÚÑ­»·ÖÐ£¬Ö»ÐèÒª¶Áµ½µ±Ç°µÄÕ»£¬È»ºóÑ­»·ÖÐ²»¶Ï´òÓ¡·µ»ØµØÖ·£¬×ßµ½ÉÏÒ»¸öÕ»¼´¿É¡£¸ù¾ÝÌáÊ¾£¬Ñ­»·ÖÕÖ¹Ìõ¼þÓÉÒ³ÃæµÄ¶¥²¿µØÖ·ºÍµ×²¿µØÖ·¾ö¶¨¡£
 
 #### Alarm
@@ -376,9 +384,9 @@ vmprint_aux º¯ÊýÊ¹ÓÃÉîËÑµÄ·½Ê½´òÓ¡Õû¸öÒ³±í
 Õâ²¿·ÖÒªÔÄ¶ÁµÄÄÚÈÝ±È½ÏÆ«ÀíÂÛ£¬²¢ÇÒ±È½ÏÉÙ£¬Òò´ËÎÒÔÚ´Ë²¿·ÖÊéÐ´Õâ¸öÊµÑéµÄÔ­Àí¡£ÏÂÃæµÄlab6Í¬Àí¡£
 
 1. Ô­ÓÐÂß¼­
-  ![](./Resource/Lab5/bef.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab5/bef.png)
 2. lazy allocation
-  ![](./Resource/Lab5/aft.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab5/aft.png)
 
 ### ÌâÄ¿
 
@@ -409,8 +417,8 @@ cow: copy on write
 
 ¶ÔÓÚfork
 
-  - Ô­ÏÈÂß¼­: ½«¸¸½ø³ÌµÄËùÓÐÓÃ»§¿Õ¼äÄÚ´æ¸´ÖÆµ½×Ó½ø³ÌÖÐ
-  - cow: ÔÚforkÊ±£¬²»½øÐÐÊµ¼ÊµÄ¿½±´£¬Ö»ÊÇ½«ÐéÄâµØÖ·Ö¸ÏòÓë¸¸½ø³ÌÏàÍ¬µÄÎïÀíµØÖ·¡£Ö»ÓÐÔÚÉè¼ÆÐÞ¸Ä²Ù×÷Ê±£¬²ÅÕæÕý½øÐÐ¿½±´¡£
+- Ô­ÏÈÂß¼­: ½«¸¸½ø³ÌµÄËùÓÐÓÃ»§¿Õ¼äÄÚ´æ¸´ÖÆµ½×Ó½ø³ÌÖÐ
+- cow: ÔÚforkÊ±£¬²»½øÐÐÊµ¼ÊµÄ¿½±´£¬Ö»ÊÇ½«ÐéÄâµØÖ·Ö¸ÏòÓë¸¸½ø³ÌÏàÍ¬µÄÎïÀíµØÖ·¡£Ö»ÓÐÔÚÉè¼ÆÐÞ¸Ä²Ù×÷Ê±£¬²ÅÕæÕý½øÐÐ¿½±´¡£
 
 ### ÌâÄ¿
 
@@ -446,7 +454,7 @@ cow: copy on write
 ÔÚ±¾½ÚÖÐÑÐ¾¿ÄÚºËÏß³Ìµ½µ÷¶È³ÌÐòÏß³ÌµÄÇÐ»»¡£
 
 1. µ÷¶È³ÌÐò²»ÄÜÔÚ¾É½ø³ÌµÄÄÚºËÕ»Ö´ÐÐ£¬ÒòÎª±ðµÄÄÚºË¿ÉÄÜÖØÐÂ»½ÐÑ¾É½ø³Ì£¬´Ó¶øÔÚÁ½¸öºËÐÄ±£ÁôÁËÍ¬Ò»¸ö½ø³ÌµÄÄÚºËÕ»¡£Òò´Ë£¬Ã¿¸öCPU¶¼ÓÐÒ»¸ö×¨ÓÃµÄµ÷¶ÈÏß³Ì¡£ÈçÍ¼ËùÊ¾:
-  ![](./Resource/Lab7/p1.png)
+  ![ÏÔÊ¾´íÎó](./Resource/Lab7/p1.png)
 2. º¯ÊýswtchÓÃÀ´Ö´ÐÐÏß³ÌµÄ±£´æºÍ»Ö¸´²Ù×÷¡£ÔÚ´Ë´¦£¬ÉÏÏÂÎÄ½«»á±»ÇÐ»»Îª±£´æÔÚcpuÖÐµÄµ÷¶È³ÌÐòµÄÉÏÏÂÎÄ¡£
 
 #### 7.3 ´úÂë: µ÷¶È
@@ -472,14 +480,14 @@ myproc·µ»Øµ±Ç°cpuÔËÐÐµÄ½ø³ÌµÄÖ¸Õë£¬Í¨¹ý½ûÓÃÖÐ¶Ïºó´ÓcpuÈ¡»Ø½ø³ÌºóÆôÓÃÖÐ¶ÏÊµÏÖ¡£µ«
 
 #### ×Ü½á: ÉÏÏÂÎÄÇÐ»»Á÷³Ì
 
-![](./Resource/Lab7/p1.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab7/p1.png)
 
 1. ÏÈ¾­¹ýtrap,±£´æÓÃ»§¿Õ¼äµÄÉÏÏÂÎÄ£¬½øÈëÄÚºË
 2. Èç¹ûÊÇÊ±¼äÆ¬²úÉúµÄÖÐ¶Ï£¬ÄÇÃ´»á½«µ±Ç°µÄcpu×ÊÔ´ÈÃ¶É£¬µ÷ÓÃswtchº¯Êý½øÐÐÉÏÏÂÎÄµÄÇÐ»»£¬×ªµ½scheduler
 3. schedulerÑ°ÕÒÏÂÒ»¸ö¿ÉÒÔÖ´ÐÐµÄ½ø³Ì£¬È»ºóÍ¨¹ýswtchÇÐ»»µ½ÄÇ¸ö½ø³ÌÈ¥¡£
 4. ·µ»ØÓÃ»§¿Õ¼ä£¬Ö´ÐÐÓÃ»§¿Õ¼äµÄ³ÌÐò¡£
 
-![](./Resource/Lab7/p2.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab7/p2.png)
 
 ### ÌâÄ¿
 
@@ -619,7 +627,7 @@ xv6µÄÏµÍ³µ÷ÓÃ²»»áÖ±½ÓÐ´Èë´ÅÅÌ£¬¶øÊÇÔÚ´ÅÅÌµÄÈÕÖ¾ÖÐ·ÅÈëËùÓÐÐ´ÈëµÄÃèÊö£¬Ò»µ©Íê³ÉÁËË
 
 addrsÊý×éµÄÇ°NDIRECT¸öÊý¾Ý¿éÊÇÖ±½Ó¿é£¬½ÓÏÂÀ´µÄNINDIRECT¸öÊý¾Ý¿é³ÆÎª¼ä½Ó¿é£¬ÔÚ²éÔÄ¼ä½Ó¿éºó²ÅÄÜ¼ÓÔØÕæÕýµÄÊý¾Ý¡£
 
-![](./Resource/Lab9/p2.png)
+![ÏÔÊ¾´íÎó](./Resource/Lab9/p2.png)
 
 º¯ÊýbmapÓÃÀ´·ÖÅä¿é(ÏÈÖ±½Óºó¼ä½Ó)£¬itruncÊÍ·ÅÎÄ¼þµÄ¿é(ÏÈÖ±½Óºó¼ä½Ó)
 
